@@ -62,8 +62,8 @@ public class LinkedList <T>
 		System.out.println("\nList lengths computed recursively\n");
 		System.out.println("strList number of nodes: "+ strList.lengthRecursive(strList.header));
 		System.out.println("intList number of nodes: "+ intList.lengthRecursive(intList.header));
-		System.out.println("boolList number of nodes: "+ boolList.lengthRecursive(boolList.header));
-
+		System.out.println("boolList number of nodes: "+ boolList.lengthRecursive(boolList.header)+"\n");
+		strList.displayBkwd(strList.header);
 	}
 
 	/*
@@ -118,6 +118,18 @@ public class LinkedList <T>
 		} 
 		
 		return count;
+	}
+	/*
+	 *    displayBkwd()
+	 *    
+	 *    Prints linkList backwards
+	 */
+	public void displayBkwd(Node ptr) {
+		if(ptr.next != null) {			// INDUCTIVE STEP
+			displayBkwd(ptr.next);
+		} 
+		T data = ptr.data;				// BASE STEP
+		System.out.println(data);
 	}
 
 
