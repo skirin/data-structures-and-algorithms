@@ -30,6 +30,8 @@ public class MapTest
         m.insert(bio1, new Integer(16));
         m.insert(csi2, new Integer(21));
 
+        
+
         // Display the Map and its size.
 
         System.out.printf("Map size: %d\n", m.getSize());
@@ -83,7 +85,7 @@ public class MapTest
         nums.insert(new Integer(4), 4.5);
         nums.insert(new Integer(5), 5.8);
         nums.insert(new Integer(5), 6.5);
-
+        
         System.out.println(nums.toString());
         System.out.printf("Map size: %d\n", nums.getSize());
 
@@ -104,7 +106,6 @@ public class MapTest
         Integer myValue = new Integer(7);
 
         // Try removing an item
-
         b.remove(myValue);
 
         // Print the size of the map
