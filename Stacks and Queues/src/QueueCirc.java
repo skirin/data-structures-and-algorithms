@@ -73,10 +73,9 @@ public class QueueCirc<T> implements QueueInterface<T>
      */
     public boolean isEmpty()
     {
-    	if ((front - 1) == rear)
-    		return true;
-    	else
-    		return false;
+    	int temp = rear;
+    	temp = (temp + 1) % A.length; 
+    	return (temp == front);
     }
     
     /*
@@ -85,10 +84,10 @@ public class QueueCirc<T> implements QueueInterface<T>
      */
     public boolean isFull()
     {
-    	if ((front - 2) == rear)
-    		return true;
-    	else
-    		return false;
+    	int temp = rear;
+    	temp = (temp + 1) % A.length; 
+    	temp = (temp + 1) % A.length; 
+    	return (temp == front);
     }
     
     /*

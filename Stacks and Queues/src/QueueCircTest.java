@@ -9,7 +9,7 @@ public class QueueCircTest {
 	
 	public static void main(String[] args) 
 	{
-		QueueS<Integer> q = new QueueS<Integer>();
+		QueueCirc<Integer> q = new QueueCirc<Integer>();
 		Integer n = null;
 		
 		
