@@ -8,9 +8,10 @@ public class PQDemo {
 
     public static void main(String[] args) {
         
-        PQarray<Integer> pq = new PQarray<Integer>();
-        PQarray<String>  strPQ = new PQarray<String>();
-        PQarray<IntegerNode> intPQ = new PQarray<IntegerNode>();
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+        PriorityQueue<String>  strPQ = new PriorityQueue<String>();
+        PriorityQueue<IntegerNode> intPQ = new PriorityQueue<IntegerNode>();
+        PriorityQueue<Student> sPQ = new PriorityQueue<Student>();
         
         pq.enqueue(6);     // enqueue some Integers into the queue pq.
         pq.enqueue(8);     //
@@ -49,8 +50,22 @@ public class PQDemo {
         intPQ.enqueue(new IntegerNode(5));
         
         System.out.println( intPQ.toString() );  // Display the IntegerNode
-                                                 // queue.
+        										// queue.
 
+        sPQ.enqueue(new Student(2015, "Smith", "Joe")); // enqueue some Students
+        sPQ.enqueue(new Student(2014, "Smith", "Joe"));	// sorted by lowest
+        sPQ.enqueue(new Student(2015, "Smith", "Adam"));// class year, then by
+        sPQ.enqueue(new Student(2015, "Smith", "Mike"));// last name alpha...
+        sPQ.enqueue(new Student(2013, "Jackson", "Amy"));
+        sPQ.enqueue(new Student(2018, "Matten", "Pamela"));
+        sPQ.enqueue(new Student(2012, "Johnson", "Joe"));
+        
+        System.out.println(sPQ.toString());	// print queue
+        
+        sPQ.dequeue();	// test dequeueing a student
+        
+        System.out.println(sPQ.toString());
+        
     }
     
 }
