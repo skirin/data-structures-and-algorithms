@@ -133,6 +133,7 @@ public class HEncode {
 		for (int i = 0; i < freq.length; i++) { // Only show the bytes
 			if (freq[i] != 0) { // having non-zero frequency.
 				Node temp = new Node((byte) i, null, null, null, freq[i]);
+				leafPtr[i] = temp;
 				pq.enqueue(temp);
 			}
 		}
@@ -148,41 +149,57 @@ public class HEncode {
 	 */
 
 	public void buildTree() {
-		while (!pq.isEmpty()) {
-			if (this.root == null) {
-				Node temp = new Node();
-				temp.lchild = pq.dequeue();
-				temp.lchild.parent = temp;
-				leafPtr[temp.lchild.data] = temp.lchild;
-				temp.rchild = pq.dequeue();
-				temp.rchild.parent = temp;
-				leafPtr[temp.rchild.data] = temp.rchild;
-				temp.frequency = temp.lchild.frequency + temp.rchild.frequency;
-				this.root = temp;
-			} else if (!pq.isEmpty()) {
-				Node temp = new Node();
-				temp.lchild = pq.dequeue();
-				temp.lchild.parent = temp;
-				leafPtr[temp.lchild.data] = temp.lchild;
-				temp.rchild = root;
-				temp.rchild.parent = temp;
-				temp.frequency = temp.lchild.frequency + temp.rchild.frequency;
-				this.root = temp;
+		Node temp1 = null;
+		Node temp2;
+		Node temp3;
+		
+		boolean built = false;
+		
+		while (!built) {
+			
+			temp1 = pq.dequeue();	
+			
+			if (!pq.isEmpty()) {
+				
+				temp3 = new Node();
+				
+				temp2 = pq.dequeue();
+				
+				temp3.frequency = (temp1.frequency + temp2.frequency);
+				
+				temp3.lchild = temp1;
+				temp3.rchild = temp2;
+				
+				temp1.parent = temp3;
+				temp2.parent = temp3;
+				
+				pq.enqueue(temp3);
+			} else {
+				built = true;
 			}
 		}
+		root = temp1;
+		
 	}
 
 	public void encodeFile() {
 		bitw.writeInt(root.frequency);
 		writeTree(root);
-		BitReader bitr = new BitReader(inputFilename);
-		byte next = bitr.readByte();
-		while (next != -1) {
-			writeCode(next);
-			next = bitr.readByte();
-		} 
-		bitw.writeByte(0);
-		bitr.close();
+		
+		FileInputStream inF;
+		int nextByte;
+		
+		try {
+			inF = new FileInputStream(inputFilename);
+			
+			nextByte = inF.read();
+			while (nextByte != -1) {
+				writeCode((byte) nextByte);
+				nextByte = inF.read();
+			}
+		} catch(IOException e) {}
+		
+		bitw.close();
 	}
 
 	/*
@@ -195,21 +212,24 @@ public class HEncode {
 	 */
 
 	public void writeCode(byte b) {
-		Node child = leafPtr[b];
-		Node parent = child.parent;
-		int bit = -1;
-		while (parent != null) {
+		Node parent;
+		Node child;
+		
+		child = leafPtr[b];
+
+		while (child.parent != null) {
+			parent = child.parent;
 			if (parent.lchild == child)
 				stk.push(0);
 			else
 				stk.push(1);
 			child = parent;
-			parent = child.parent;
 		}
-		while (!stk.isEmpty()) {
-			bit = stk.pop();
-			bitw.writeBit(bit);
-		}
+		
+		while (!stk.isEmpty()) 
+			bitw.writeBit(stk.pop());
+		stk.toString();
+		
 	}
 
 	/*
@@ -224,7 +244,8 @@ public class HEncode {
 		else if(root == leafPtr[root.data]) {
 			bitw.writeBit(0);
 			bitw.writeByte(root.data);
-		} else {
+		} 
+		else {
 			bitw.writeBit(1);
 			writeTree(root.lchild);
 			writeTree(root.rchild);
@@ -253,10 +274,11 @@ public class HEncode {
 		for (int i = 0; i < level; i++)
 			System.out.print("         ");
 
-		if (r.data > (byte) 31)
+		if (r.data > (byte) 31){
 			System.out.printf("%c-%d\n", (char) r.data, r.frequency);
-		else
+		} else {
 			System.out.printf("%c-%d\n", '*', r.frequency);
+		}
 
 		rPrintTree(r.lchild, level + 1);
 	}
@@ -303,9 +325,9 @@ public class HEncode {
 		 */
 
 		public int compareTo(Node other) {
-			if (this.frequency.compareTo(other.frequency) > 0)
+			if (this.frequency.compareTo(other.frequency) < 0)
 				return 1;
-			else if (this.frequency.compareTo(other.frequency) < 0)
+			else if (this.frequency.compareTo(other.frequency) > 0)
 				return -1;
 			else
 				return 0;

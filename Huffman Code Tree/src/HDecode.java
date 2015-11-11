@@ -5,6 +5,7 @@
 
 import java.io.*;
 
+
 public class HDecode {
 
 	private Node root = null; // Root of the Huffman Code Tree.
@@ -35,6 +36,7 @@ public class HDecode {
 		fileSize = bitr.readInt();
 
 		root = readTree();
+		printTree();
 		int bit = 0;
 		for (int i = 0; i < fileSize; i++) {
 			Node temp = root;
@@ -70,6 +72,32 @@ public class HDecode {
 		}
 	}
 
+	public void printTree() {
+		rPrintTree(root, 0);
+	}
+
+	/*
+	 * rPrintTree() - the usual quick recursive method to print a tree.
+	 */
+
+	public void rPrintTree(Node r, int level) {
+
+		if (r == null) // Empty tree.
+			return;
+
+		rPrintTree(r.rchild, level + 1); // Print the right subtree.
+
+		for (int i = 0; i < level; i++)
+			System.out.print("         ");
+
+		if (r.data > (byte) 31)
+			System.out.printf("%c-%d\n", (char) r.data, r.frequency);
+		else
+			System.out.printf("%c-%d\n", '*', r.frequency);
+
+		rPrintTree(r.lchild, level + 1);
+	}
+	
 	public class Node implements Comparable<Node> {
 		byte data; // A byte of data - stored in an Integer.
 		Node lchild; // Left child pointer.

@@ -72,7 +72,7 @@ public class PriorityQueue<T extends Comparable<T>> implements PQInterface<T> {
 		} else {
 			while (ptr.next != null) {	// while not at the rear sent.
 				// if data priority coming in is greater than queue data 
-				if (ptr.data.compareTo(data) > 0) { 
+				if (data.compareTo(ptr.data) > 0) { 
 					// ...insert before queue data
 					temp.prev = ptr.prev;	// Link to previous node
 					temp.next = ptr;		// Link to current node
@@ -91,6 +91,28 @@ public class PriorityQueue<T extends Comparable<T>> implements PQInterface<T> {
 
 	}
 
+//	public void enqueue(T data) {
+//		if(!isFull()) {
+//			Node ptr = fPtr.next;
+//			Node empty = new Node();
+//			empty.data = data;
+//			
+//			if(!isEmpty()) 
+//			{
+//				while (empty.data.compareTo(ptr.data) <= 0 && ptr.next != rPtr) 
+//				{
+//					ptr = ptr.next;
+//					
+//					if(empty.data.compareTo(ptr.data) <= 0)
+//						ptr = ptr.next;
+//				}
+//			}
+//			empty.next = ptr;
+//			empty.prev = ptr.prev;
+//			ptr.prev.next = empty;
+//			ptr.prev =empty;
+//		}
+//	}
 	/*
 	 * dequeue()
 	 * 
