@@ -26,41 +26,60 @@ public class HDecode {
 
 	public HDecode(String inputFilename) throws FileNotFoundException {
 		this.inputFilename = inputFilename;
+		
+		//create an output file name with the same name as the input and .orig filetype
 		this.outputFilename = inputFilename.substring(0, inputFilename.indexOf(".huf"));
 		
 		outF = new FileOutputStream(this.outputFilename + ".orig");
 	}
 
+	/*
+	 * Read the filesize then reconstruct the huffman code tree. 
+	 * Use the tree to decode the rest of the file. 
+	 * Output a file with a .orig file type that should exactly match
+	 * the original text file
+	 */
 	public void decode() throws IOException {
-		bitr = new BitReader(inputFilename);
-		fileSize = bitr.readInt();
+		
+		bitr = new BitReader(inputFilename); //create a new bit reader
+		
+		fileSize = bitr.readInt(); //the first int is the file size
 
-		root = readTree();
-		printTree();
-		int bit = 0;
-		for (int i = 0; i < fileSize; i++) {
+		root = readTree(); //the huffman code tree is after the file size
+		
+		int bit = 0; //create an int to read each bit
+		
+		for (int i = 0; i < fileSize; i++) { //loop for each bit in the file
+			
+			//traverse the tree from the root until the right node is found
 			Node temp = root;
 			while (temp.lchild != null || temp.rchild != null) { 
 				bit = bitr.readBit();
-				if (bit == 1)
+				if (bit == 1) //if 1, we should go right
 					temp = temp.rchild;
-				else
+				else //else, we should go left
 					temp = temp.lchild;
 			} 
-			outF.write(temp.data);
-			temp = root;
+			
+			outF.write(temp.data); //write the correct node's data
+			temp = root; //reset temp to the top of the tree
 		}
 	}
 
+	/*
+	 * Reads the tree in the huffman encoded file. each leaf node is preceded by a 0
+	 * followed by the data. An intermediary node is preceded by a 1. Use this pattern
+	 * to reconstruct the huffman tree
+	 */
 	public Node readTree() {
-		int bit = bitr.readBit();
+		int bit = bitr.readBit(); //create an int variable to read each bit
 
-		if (bit == 0) {
+		if (bit == 0) { //if 0, we are at a leaf node, read the data
 			byte data = bitr.readByte();
 			Node temp = new Node();
 			temp.data = data;
 			return temp;
-		} else {
+		} else { //otherwise, we are at an intermediary node, keep reading
 			Node lchild = readTree();
 			Node rchild = readTree();
 			Node temp = new Node();
@@ -70,32 +89,6 @@ public class HDecode {
 			rchild.parent = temp;
 			return temp;
 		}
-	}
-
-	public void printTree() {
-		rPrintTree(root, 0);
-	}
-
-	/*
-	 * rPrintTree() - the usual quick recursive method to print a tree.
-	 */
-
-	public void rPrintTree(Node r, int level) {
-
-		if (r == null) // Empty tree.
-			return;
-
-		rPrintTree(r.rchild, level + 1); // Print the right subtree.
-
-		for (int i = 0; i < level; i++)
-			System.out.print("         ");
-
-		if (r.data > (byte) 31)
-			System.out.printf("%c-%d\n", (char) r.data, r.frequency);
-		else
-			System.out.printf("%c-%d\n", '*', r.frequency);
-
-		rPrintTree(r.lchild, level + 1);
 	}
 	
 	public class Node implements Comparable<Node> {

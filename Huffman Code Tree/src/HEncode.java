@@ -49,6 +49,7 @@ public class HEncode {
 		HEncode coder = new HEncode(args[0]); // Construct a Huffman Encoder
 
 		coder.getFrequencies(); // Get the frequencies of bytes in inputfile.
+
 		if (coder.DEBUG)
 			coder.showFreq(); // For debug - Let's see if we got the freqs.
 		coder.getLeafPtrs(); // Get initial trees used to build code tree.
@@ -67,7 +68,8 @@ public class HEncode {
 
 	public HEncode(String inputFilename) {
 		this.inputFilename = inputFilename;
-		this.bitw = new BitWriter(inputFilename+".huf");
+		this.bitw = new BitWriter(inputFilename + ".huf"); // create the
+															// bitwriter
 	}
 
 	/*
@@ -132,9 +134,11 @@ public class HEncode {
 	public void getLeafPtrs() {
 		for (int i = 0; i < freq.length; i++) { // Only show the bytes
 			if (freq[i] != 0) { // having non-zero frequency.
+
+				// create a new node with just data
 				Node temp = new Node((byte) i, null, null, null, freq[i]);
-				leafPtr[i] = temp;
-				pq.enqueue(temp);
+				leafPtr[i] = temp; // add the node to leafptrs array
+				pq.enqueue(temp); // add the node to the priority queue
 			}
 		}
 	}
@@ -149,56 +153,62 @@ public class HEncode {
 	 */
 
 	public void buildTree() {
-		Node temp1 = null;
-		Node temp2;
-		Node temp3;
 		
-		boolean built = false;
-		
-		while (!built) {
+		//create 3 temp nodes to make each subtree
+		Node low 			= null;
+		Node high 			= null;
+		Node subtreeRoot 	= null;
+
+
+		while (!pq.isEmpty()) { //loop until the priority queue is empty
 			
-			temp1 = pq.dequeue();	
+			low = pq.dequeue(); //dequeue the first element to be the left child
 			
-			if (!pq.isEmpty()) {
-				
-				temp3 = new Node();
-				
-				temp2 = pq.dequeue();
-				
-				temp3.frequency = (temp1.frequency + temp2.frequency);
-				
-				temp3.lchild = temp1;
-				temp3.rchild = temp2;
-				
-				temp1.parent = temp3;
-				temp2.parent = temp3;
-				
-				pq.enqueue(temp3);
-			} else {
-				built = true;
+			if(pq.isEmpty()) { //exit the loop if low was the last element
+				break;
 			}
+			
+			subtreeRoot = new Node(); //create a new subtree root every iteration
+			
+			high = pq.dequeue();      //get the next highest frequency node
+			
+			//add the frequencies of the children to get the parent frequency
+			subtreeRoot.frequency = (low.frequency + high.frequency);
+
+			//set the relationships of each node
+			subtreeRoot.lchild = low;
+			subtreeRoot.rchild = high;
+			low.parent = subtreeRoot;
+			high.parent = subtreeRoot;
+
+			//add the new 'root' node back to the priority queue
+			pq.enqueue(subtreeRoot);
 		}
-		root = temp1;
-		
+		root = low; //root will be the last element in the priority queue
 	}
 
 	public void encodeFile() {
-		bitw.writeInt(root.frequency);
-		writeTree(root);
+		bitw.writeInt(root.frequency); //the frequency of the root node is 
+		                               //the size of the file
 		
+		writeTree(root);  //wrote the tree, starting at the root
+
+		//create a fileinputstream to read the original text
 		FileInputStream inF;
 		int nextByte;
-		
+
 		try {
 			inF = new FileInputStream(inputFilename);
-			
+
 			nextByte = inF.read();
+			
+			//write the code for each char until the end of file
 			while (nextByte != -1) {
 				writeCode((byte) nextByte);
 				nextByte = inF.read();
 			}
-		} catch(IOException e) {}
-		
+		} catch (IOException e) {e.printStackTrace();}
+
 		bitw.close();
 	}
 
@@ -212,24 +222,27 @@ public class HEncode {
 	 */
 
 	public void writeCode(byte b) {
-		Node parent;
-		Node child;
-		
-		child = leafPtr[b];
+		Node parent; // Node to store the parent
+		Node child; // Node to store the child
 
+		child = leafPtr[b]; // start the child at the given leafptr
+
+		// loop until we reach the master root node
 		while (child.parent != null) {
-			parent = child.parent;
-			if (parent.lchild == child)
-				stk.push(0);
-			else
-				stk.push(1);
+			parent = child.parent; // set the parent to this child's parent
+
+			if (parent.lchild == child) // if the left child is the current
+										// child
+				stk.push(0); // push a 0 to the stack
+			else // otherwise, we came from the right
+				stk.push(1); // so push a 1
 			child = parent;
 		}
-		
-		while (!stk.isEmpty()) 
+
+		// empty the stack and write the bit sequence to the file
+		while (!stk.isEmpty())
 			bitw.writeBit(stk.pop());
-		stk.toString();
-		
+
 	}
 
 	/*
@@ -239,14 +252,14 @@ public class HEncode {
 	 */
 
 	public void writeTree(Node root) {
-		if (root == null)
+		if (root == null) // return when we reach the top of the tree
 			return;
-		else if(root == leafPtr[root.data]) {
+		else if (root == leafPtr[root.data]) { // if we reach a leaf node, write
+												// a 0 and the data
 			bitw.writeBit(0);
 			bitw.writeByte(root.data);
-		} 
-		else {
-			bitw.writeBit(1);
+		} else { // else, we are at an intermediary node, print a 1
+			bitw.writeBit(1); // and continue writing the tree
 			writeTree(root.lchild);
 			writeTree(root.rchild);
 		}
@@ -274,7 +287,7 @@ public class HEncode {
 		for (int i = 0; i < level; i++)
 			System.out.print("         ");
 
-		if (r.data > (byte) 31){
+		if (r.data > (byte) 31) {
 			System.out.printf("%c-%d\n", (char) r.data, r.frequency);
 		} else {
 			System.out.printf("%c-%d\n", '*', r.frequency);
