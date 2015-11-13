@@ -28,9 +28,12 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 	}
 
 	public boolean isEmpty() {
-		
+		return root == null;
 	}
 	
+	public void makeEmpty() {
+		root = null;
+	}
 	//
 	// requals() - determines if the trees with root Nodes
 	// r and b have the same structure and same
@@ -184,10 +187,10 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		Node follow = root;
 		Node ptr = root;
 		
-		while (ptr.lchild != null)
+		while (ptr.lchild != null) {
 			follow = ptr;
 			ptr = ptr.lchild;
-		
+		}
 		follow.lchild = null;
 	}
 
@@ -200,9 +203,10 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		Node follow = root;
 		Node ptr = root;
 		
-		while (ptr.rchild != null)
+		while (ptr.rchild != null) {
 			follow = ptr;
 			ptr = ptr.rchild;
+		}
 		
 		follow.rchild = null;
 	}
