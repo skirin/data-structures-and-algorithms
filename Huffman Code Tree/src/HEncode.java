@@ -1,5 +1,12 @@
-
 /*
+ * CSI 220: Data Structures & Algorithms
+ * @version 1.0 22 October 2015
+ * @author Victor Lora & Jalal Khan
+ * @description 
+ *   A program that translates Infix to Postfix.
+ *   
+ *
+ *
  *    class HEncode - A program to encode a file using Huffman Code Algorithm.
  */
 
