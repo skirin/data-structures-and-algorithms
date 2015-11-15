@@ -10,6 +10,7 @@ public class BSTdemo {
 		
 		BST<Integer> t1 = new BST<Integer>(); 
 		BST<Integer> t2 = new BST<Integer>();
+		BST<Integer> t3 = new BST<Integer>();
 		
 		t1.insert(new Integer(40));   // Two identical trees are created to
 		t1.insert(new Integer(60));                // test the equals method.  To test
@@ -18,6 +19,7 @@ public class BSTdemo {
 		t1.insert(new Integer(80));                // and / or change one of the data
 		t1.insert(new Integer(70));                // values.
 		t1.insert(new Integer(10));
+		t1.insert(new Integer(9));
         t1.insert(new Integer(48));
         t1.insert(new Integer(41));
         t1.insert(new Integer(46));
@@ -89,10 +91,9 @@ public class BSTdemo {
 //		t1.removeMax();
 //		System.out.println("---------------------");
 //		t1.printTree();
-//		
-//		System.out.println("46");
-//		t1.remove(46);
-//		t1.printTree();
+		System.out.println("10");
+		t3.remove(10);
+		t1.printTree();
 //		
 //		
 //		if (t1.isEmpty())

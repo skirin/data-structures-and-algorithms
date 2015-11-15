@@ -1,6 +1,9 @@
-
 /*
- *    An implementation of a generic Binary Search Tree.
+ * CSI 220: Data Structures & Algorithms
+ * @version 1.0 17 November 2015
+ * @author Victor Lora & Aliya Gangji
+ * @description 
+ *		An implementation of a generic Binary Search Tree.
  */
 
 public class BST<T extends Comparable<T>> implements BSTInterface<T> {
@@ -30,7 +33,7 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 	public boolean isEmpty() {
 		return root == null;
 	}
-	
+
 	public void makeEmpty() {
 		root = null;
 	}
@@ -186,7 +189,7 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 	public void removeMin() {
 		Node follow = root;
 		Node ptr = root;
-		
+
 		while (ptr.lchild != null) {
 			follow = ptr;
 			ptr = ptr.lchild;
@@ -202,12 +205,12 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 	public void removeMax() {
 		Node follow = root;
 		Node ptr = root;
-		
+
 		while (ptr.rchild != null) {
 			follow = ptr;
 			ptr = ptr.rchild;
 		}
-		
+
 		follow.rchild = null;
 	}
 
@@ -218,28 +221,62 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 	// do nothing, just return.
 
 	public void remove(T x) {
-		return; // stub
+		Node follow = root;
+		Node ptr = root;
+		boolean removed = false;
+		
+		if (this.isEmpty())
+			return;
 
-		// Removing an arbitrary node is handled by
-		// considering several cases. Implement and
-		// test each case, finishing one case before
-		// tackling the next.
-
-		// Case 1: The node to delete is a leaf.
-
-		// Case 2: The the node to delete has a left subtree
-		// but no right subtree.
-
-		// Case 3: The node to delete has a right subtree
-		// but no left subtree.
-
-		// Case 4: The node to delete has both left and right subtrees.
-		//
-		// In this case, we swap the data in the node with the
-		// smallest data value in its right subtree, then we delete this
-		// "smallest data" node which is either a leaf or a node
-		// with only a single subtree (left or right, but not both.)
-
+		while (!removed && ptr != null) {
+			if (x.equals(ptr.data)) {
+				if (ptr.lchild == null && ptr.rchild == null) {
+					if (follow.lchild == ptr) {
+						System.out.println(follow.lchild.data);
+						follow.lchild = null;
+					} else {
+						System.out.println(follow.rchild.data);
+						follow.rchild = null;
+					}
+					removed = true;
+				} else if (ptr.lchild == null && ptr.rchild != null) {
+					if (follow.lchild == ptr)
+						follow.lchild = ptr.rchild;
+					else
+						follow.rchild = ptr.rchild;
+					removed = true;
+				} else if (ptr.lchild != null && ptr.rchild == null) {
+					if (follow.lchild == ptr)
+						follow.lchild = ptr.lchild;
+					else
+						follow.rchild = ptr.lchild;
+					removed = true;
+				} else {
+					T temp = ptr.data;
+					ptr = ptr.rchild;
+					while (ptr.lchild != null) {
+						ptr = ptr.lchild;
+					}
+					if (follow.lchild.data.equals(temp)) {
+						follow.lchild.data = ptr.data;
+						ptr.data = temp;
+						follow = follow.lchild;
+					} else {
+						follow.rchild.data = ptr.data;
+						ptr.data = temp;
+						follow = follow.rchild;
+					}
+					removed = false;
+				}
+			} else if (x.compareTo(ptr.data) > 0) {
+				follow = ptr;
+				ptr = ptr.rchild;
+			} else {
+				follow = ptr;
+				ptr = ptr.lchild;
+			}
+		}
+		return;
 	}
 
 	//
