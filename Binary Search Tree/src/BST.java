@@ -159,7 +159,9 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 
 	public T findMax() {
 		Node parent = root;
-
+		if (this.isEmpty())
+			return null;
+		
 		while (parent.rchild != null)
 			parent = parent.rchild;
 
@@ -190,10 +192,26 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		Node follow = root;
 		Node ptr = root;
 
+		if (this.isEmpty()) { return; }
+		
+		if (ptr.lchild == null && ptr.rchild == null) {
+			this.root = null;
+			return;
+		}
+
 		while (ptr.lchild != null) {
 			follow = ptr;
 			ptr = ptr.lchild;
 		}
+
+		if (ptr.rchild != null) {
+			if (follow.lchild == ptr)
+				follow.lchild = ptr.rchild;
+			else if (follow == ptr)
+				root = ptr.rchild;
+			return;
+		}
+
 		follow.lchild = null;
 	}
 
@@ -221,8 +239,8 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		if (ptr.lchild != null) {
 			if (follow.rchild == ptr)
 				follow.rchild = ptr.lchild;
-			else
-				follow.lchild = ptr.lchild;
+			else if (follow == ptr)
+				root = ptr.lchild;
 			return;
 		}
 
