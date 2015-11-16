@@ -14,7 +14,7 @@ public interface BSTInterface <T extends Comparable<T>>
 	public void printTree();  // Display the tree and stdout.
     public boolean isEmpty(); // Determine if the tree is empty.
  	public void makeEmpty();  // Remove all items from the tree.
-//	public void inorder();    // Display an inorder traversal of the tree.
-//	public void preorder();   // Display a preorder traversal of the tree
-//	public void postorder();  // Display a postorder traversal of the tree.
+	public void inorder();    // Display an inorder traversal of the tree.
+	public void preorder();   // Display a preorder traversal of the tree
+	public void postorder();  // Display a postorder traversal of the tree.
 }

@@ -206,9 +206,24 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		Node follow = root;
 		Node ptr = root;
 
+		if (this.isEmpty()) { return; }
+		
+		if (ptr.lchild == null && ptr.rchild == null) {
+			this.root = null;
+			return;
+		}
+
 		while (ptr.rchild != null) {
 			follow = ptr;
 			ptr = ptr.rchild;
+		}
+
+		if (ptr.lchild != null) {
+			if (follow.rchild == ptr)
+				follow.rchild = ptr.lchild;
+			else
+				follow.lchild = ptr.lchild;
+			return;
 		}
 
 		follow.rchild = null;
@@ -224,7 +239,7 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 		Node follow = root;
 		Node ptr = root;
 		boolean removed = false;
-		
+
 		if (this.isEmpty())
 			return;
 
@@ -232,10 +247,8 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 			if (x.equals(ptr.data)) {
 				if (ptr.lchild == null && ptr.rchild == null) {
 					if (follow.lchild == ptr) {
-						System.out.println(follow.lchild.data);
 						follow.lchild = null;
 					} else {
-						System.out.println(follow.rchild.data);
 						follow.rchild = null;
 					}
 					removed = true;
@@ -252,21 +265,12 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 						follow.rchild = ptr.lchild;
 					removed = true;
 				} else {
-					T temp = ptr.data;
-					ptr = ptr.rchild;
-					while (ptr.lchild != null) {
-						ptr = ptr.lchild;
-					}
-					if (follow.lchild.data.equals(temp)) {
-						follow.lchild.data = ptr.data;
-						ptr.data = temp;
-						follow = follow.lchild;
-					} else {
-						follow.rchild.data = ptr.data;
-						ptr.data = temp;
-						follow = follow.rchild;
-					}
-					removed = false;
+					Node temp = ptr;
+					temp = temp.rchild;
+					while (temp.lchild != null)
+						temp = temp.lchild;
+					remove(temp.data);
+					ptr.data = temp.data;
 				}
 			} else if (x.compareTo(ptr.data) > 0) {
 				follow = ptr;
@@ -305,5 +309,15 @@ public class BST<T extends Comparable<T>> implements BSTInterface<T> {
 			this.lchild = lchild;
 			this.rchild = rchild;
 		}
+	}
+
+	public void preorder() {
+		return; // stub
+
+	}
+
+	public void postorder() {
+		return; // stub
+
 	}
 }

@@ -20,13 +20,16 @@ public class BSTdemo {
 		t1.insert(new Integer(70));                // values.
 		t1.insert(new Integer(10));
 		t1.insert(new Integer(9));
+		t1.insert(new Integer(15));
+		t1.insert(new Integer(14));
+		t1.insert(new Integer(16));
         t1.insert(new Integer(48));
         t1.insert(new Integer(41));
         t1.insert(new Integer(46));
         t1.insert(new Integer(47));
         t1.insert(new Integer(44));
         t1.insert(new Integer(5));
-        t1.insert(new Integer(15));
+        
         
 		
 		t2.insert(new Integer(40));
@@ -57,20 +60,19 @@ public class BSTdemo {
 		// Here we test findMax() and findMin() - Note: this code
 		// fails if the tree is empty and null is returned.
 		
-		System.out.println("\nt1 max is " + t1.findMax().toString());
-		System.out.println("\nt2 max is " + t2.findMax().toString());
-
-		System.out.println("\nt1 min is " + t1.findMin().toString());
-		System.out.println("\nt2 min is " + t2.findMin().toString());
+//		System.out.println("\nt1 max is " + t1.findMax().toString());
+//		System.out.println("\nt2 max is " + t2.findMax().toString());
+//
+//		System.out.println("\nt1 min is " + t1.findMin().toString());
+//		System.out.println("\nt2 min is " + t2.findMin().toString());
 		
 		// Test removeMin) and removeMax()
 		// After each removal print the tree.
 		
-//		while (!t1.isEmpty()) {
-//		    t1.removeMax();
-//		    System.out.println("---------------------");
-//		    t1.printTree();
-//		}
+		while (!t1.isEmpty()) {
+		    System.out.println("--------------------");
+		    t1.printTree();
+		}
 		
 		t1.removeMin();
 		System.out.println("---------------------");
@@ -92,7 +94,7 @@ public class BSTdemo {
 //		System.out.println("---------------------");
 //		t1.printTree();
 		System.out.println("10");
-		t3.remove(10);
+		t1.remove(10);
 		t1.printTree();
 //		
 //		
