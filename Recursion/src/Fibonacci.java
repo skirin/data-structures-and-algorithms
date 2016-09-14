@@ -63,26 +63,30 @@ public class Fibonacci
 	 */
 	public static long fib(int n)
 	{
+        count++;
 		if(n<=1) {
-			count++;
 			return n;
 		} else {
-			count++;
 			return fib(n-1) + fib(n-2);
 		}
 	}
 		
 	public static long fibB(int n)
 	{
-	    if(F[n]==-1){		// checks if fib(n) has been calculated
-	    	if(n<=1) {		// for n = 0|1...
-				count++;
-				F[n] = n;	// Adds F[0]=0 | F[1]=1 to the array
-			} else {
-				count++;
-				F[n] = fibB(n-1) + fibB(n-2);
-			}
+        count++;
+
+	    if(F[n] == -1)
+        {
+	    	if(n <= 1) 
+				F[n] = n;	
+            else if (F[n-1] != -1 && F[n-2] != -1) 
+				F[n] = F[n-1] + F[n-2];
+            else if (F[n-1] == -1 && F[n-2] != -1)
+                F[n] = fibB(n-1) + F[n-2];
+            else
+                F[n] = fibB(n-1) + fibB(n-2);
 	    } 
+
 	    return F[n];
 	}
 }
