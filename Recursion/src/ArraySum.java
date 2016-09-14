@@ -37,11 +37,12 @@ public class ArraySum
 		int sum = 0;
 		if (i > j) {					// BASE STEP
 			return 0;
-		} else {						// INDUCTIVE STEP
-			sum += X[i];
-			sum += sum(X, i + 1, j);
 		}
-		return sum;
+        
+        sum += X[i];
+        
+        // INDUCTIVE STEP
+		return sum + sum(X, i + 1, j);
 	}
 
 }
