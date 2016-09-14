@@ -41,12 +41,9 @@ public class CannonBall {
 
 	public static int cannon(int n)
 	{
-		int retVal = 0;		// Return value.
-		if (n==1) 							// Base step
+        if (n==1) 							// Base step
 			return 1;
-		else {
-			retVal += (n*n) + cannon(n-1);	// Inductive step
-			return retVal;
-		}
+
+        return (n*n) + cannon(n-1);
 	}
 }

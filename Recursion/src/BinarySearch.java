@@ -77,19 +77,20 @@ public class BinarySearch {
 		int mid = 0;
 		int index = -1;
 		boolean found = false;
+
 		mid = (left + right) / 2;
 		
 		if (left <= right && !found) {
 			if (A[mid] == key) {	// BASE STEP
 				found = true;
 				return mid;
-			}
-			else if (key < A[mid]) {	// INDUCTIVE STEP
+			} else if (key < A[mid]) {	// INDUCTIVE STEP
 				index = SearchBinRecursive(A, key, left, mid - 1);
 			} else  {
 				index = SearchBinRecursive(A, key, mid + 1, right);
 			}
 		}
+
 		return index;
 	}
 

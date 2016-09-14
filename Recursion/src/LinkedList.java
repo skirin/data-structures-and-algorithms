@@ -109,15 +109,11 @@ public class LinkedList <T>
 	 */
 
 	public int lengthRecursive(Node ptr) {
-		int count = 0;
-		if (ptr == null) {
+		if (ptr == null) 
 			return 0;						// BASE STEP
-		} else {							// INDUCTIVE STEP
-				ptr = ptr.next;				// Gets the address of the next node
-				count = 1 + lengthRecursive(ptr);
-		} 
-		
-		return count;
+
+        // INDUCTIVE STEP
+		return 1 + lengthRecursive(ptr.next);
 	}
 	/*
 	 *    displayBkwd()
